@@ -1,10 +1,28 @@
-\# Satisfaction Client IA — GLPI Plugin
+\# Satisfaction Client IA — GLPI
 
 
 
 \## Description
 
-API Flask + Qwen2.5 pour analyser la satisfaction client GLPI.
+Analyse automatique de la satisfaction client GLPI via Ollama + Qwen2.5.
+
+Pas de serveur web — exécution directe en Python.
+
+
+
+\## Ce que ça fait
+
+\- Détecte le sentiment (joie, colère, tristesse, neutre)
+
+\- Calcule le score CES (Customer Effort Score)
+
+\- Identifie la cause racine (RCA)
+
+\- Détecte si une escalade est nécessaire
+
+\- Vérifie le respect du SLA
+
+\- Génère un résumé automatique
 
 
 
@@ -14,7 +32,7 @@ API Flask + Qwen2.5 pour analyser la satisfaction client GLPI.
 
 \- Ollama installé
 
-\- Qwen2.5:3b téléchargé
+\- Modèle Qwen2.5:3b téléchargé
 
 
 
@@ -28,7 +46,7 @@ https://ollama.com/download
 
 
 
-\### 2. Télécharger Qwen
+\### 2. Télécharger le modèle
 
 ollama pull qwen2.5:3b
 
@@ -36,15 +54,7 @@ ollama pull qwen2.5:3b
 
 \### 3. Installer les dépendances
 
-pip install -r requirements.txt
-
-
-
-\### 4. Lancer l'API
-
-cd api
-
-python app.py
+pip install -r api/requirements.txt
 
 
 
@@ -52,25 +62,57 @@ python app.py
 
 
 
-\### Test santé
+\### Lancer l'analyse
 
-GET http://localhost:5000/health
+cd api
+
+python app.py
 
 
 
-\### Analyser un commentaire
+\### Exemple de résultat
 
-POST http://localhost:5000/analyse
+```json
 
 {
 
-&#x20;   "commentaire": "Excellent service !"
+&#x20; "sentiment": { "emotion": "joie", "score": 0.95 },
+
+&#x20; "ces": { "score": 5.0, "niveau": "facile" },
+
+&#x20; "rca": { "cause": "technicien compétent", "categorie": "humain" },
+
+&#x20; "escalade": { "necessaire": false, "niveau": "faible" },
+
+&#x20; "sla": { "respecte": true },
+
+&#x20; "resume": "Excellent service, satisfaction élevée."
 
 }
 
+```
 
 
-\### Analyser un ticket GLPI
 
-GET http://localhost:5000/analyse/ticket/1
+\## Structure du projet
+
+```
+
+satisfaction\_ia/
+
+├── api/
+
+│   ├── app.py            # Moteur d'analyse Ollama + Qwen2.5
+
+│   ├── analyse.py        # Scripts de test
+
+│   └── requirements.txt
+
+└── README.md
+
+```
+
+
+
+
 
